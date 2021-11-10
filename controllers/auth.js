@@ -1,20 +1,40 @@
+const User = require('../models/User')
 
-
-const crearUsuario = (req, res) => {
+const crearUsuario = async (req, res) => {
     
     const { name, email, password } = req.body
+
+    try {
+        const user = new User(req.body)
+
+        await user.save()
+
+        res.status(201).json({
+            ok: true,
+            msg: 'registro',
+            name,
+            email,
+            password
+        })
+
+
+    } catch (error) {
+
+        res.status(500).json({
+
+            ok: false,
+            msg: 'Error en el registro'
+        })
+        
+    }
+
+    
     
     //manejo de errores
 
     
 
-    res.status(201).json({
-        ok: true,
-        msg: 'registro',
-        name,
-        email,
-        password
-    })
+   
 }
 
 const loginUsuario = (req, res) => {
