@@ -10,12 +10,14 @@ const {check} = require('express-validator')
 const router = express.Router()
 
 const {crearUsuario, loginUsuario, revalidarToken }= require('../controllers/auth')
+const { validateForms } = require('../middlewares/validateForms')
 
 router.post('/register',
     [
         check('name', 'El nombre es obligatorio').notEmpty(),
         check('email', 'El email es obligatorio').isEmail(),
-        check('password', 'La contraseña debe tener al menos 6 caractéres').isLength({min:6})
+        check('password', 'La contraseña debe tener al menos 6 caractéres').isLength({ min: 6 }),
+        validateForms
     ],
     crearUsuario)
 
@@ -23,7 +25,8 @@ router.post('/register',
 router.post('/',
     [
         check('email', 'El nombre es obligatorio').isEmail(),
-        check('password', 'La contraseña debe tener al menos 6 caractéres').isLength({min: 6})
+        check('password', 'La contraseña debe tener al menos 6 caractéres').isLength({ min: 6 }),
+        validateForms
 
     ],
     
