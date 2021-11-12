@@ -1,5 +1,6 @@
 const User = require('../models/User')
 const bcrypt = require('bcryptjs')
+const { generateJWT } = require('../helpers/jwt')
 
 const crearUsuario = async (req, res) => {
     
@@ -26,10 +27,14 @@ const crearUsuario = async (req, res) => {
 
         await user.save()
 
+        //Generar JWT
+        const token = await generateJWT(user.id, user.name)
+
         res.status(201).json({
             ok: true,
             uid: user.id,
-            name: user.name
+            name: user.name,
+            token
             
         })
 
@@ -61,7 +66,7 @@ const loginUsuario = async(req, res) => {
         const user = await User.findOne({ email })
         
         if (!user) {
-            return res.status(400).jeson({
+            return res.status(400).json({
 
                 ok: false,
                 msg: "Usuario no existe"
@@ -79,11 +84,14 @@ const loginUsuario = async(req, res) => {
             })
         }
 
+        //Generar JWT
+        const token = await generateJWT(user.id, user.name)
 
         res.json({
             ok: true,
             uid: user.id,
-            name: user.name
+            name: user.name,
+            token
 
         })
         
