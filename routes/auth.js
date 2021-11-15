@@ -11,6 +11,8 @@ const router = express.Router()
 
 const {crearUsuario, loginUsuario, revalidarToken }= require('../controllers/auth')
 const { validateForms } = require('../middlewares/validateForms')
+const { validateJWT } = require('../middlewares/validateJWT')
+
 
 router.post('/register',
     [
@@ -32,6 +34,6 @@ router.post('/',
     
     loginUsuario)
 
-router.get('/renew', revalidarToken)
+router.get('/renew', validateJWT, revalidarToken)
 
 module.exports = router;
